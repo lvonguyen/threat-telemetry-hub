@@ -1,0 +1,142 @@
+# Threat Telemetry Hub Configuration
+# Copy to config.yaml and update with your values
+
+server:
+  port: 8080
+  read_timeout: 30
+  write_timeout: 30
+
+# AI Provider Configuration
+# Supports both Anthropic (Claude) and OpenAI for flexibility
+ai:
+  provider: anthropic  # Options: anthropic, openai
+  anthropic:
+    model: claude-opus-4-5-20250514
+    api_key_env: ANTHROPIC_API_KEY
+  openai:
+    model: gpt-4-turbo
+    api_key_env: OPENAI_API_KEY
+
+# Ingestion Sources
+ingestion:
+  # EDR Tool Integrations
+  edr:
+    crowdstrike:
+      enabled: false
+      api_url: https://api.crowdstrike.com
+      client_id_env: CS_CLIENT_ID
+      client_secret_env: CS_CLIENT_SECRET
+    sentinelone:
+      enabled: false
+      api_url: https://usea1.sentinelone.net
+      api_token_env: S1_API_TOKEN
+    defender:
+      enabled: false
+      tenant_id_env: AZURE_TENANT_ID
+      client_id_env: AZURE_CLIENT_ID
+      secret_env: AZURE_CLIENT_SECRET
+    carbon_black:
+      enabled: false
+      api_url: https://defense.conferdeploy.net
+      api_key_env: CB_API_KEY
+      api_secret_env: CB_API_SECRET
+
+  # SIEM Integrations
+  siem:
+    splunk:
+      enabled: false
+      hec_url: https://splunk.example.com:8088
+      hec_token_env: SPLUNK_HEC_TOKEN
+    sentinel:
+      enabled: false
+      workspace_id: your-workspace-id
+      shared_key_env: SENTINEL_SHARED_KEY
+    elasticsearch:
+      enabled: false
+      addresses:
+        - https://elasticsearch.example.com:9200
+      username: elastic
+      password_env: ES_PASSWORD
+      index: security-*
+
+  # Cloud Audit Log Sources
+  cloud:
+    aws:
+      enabled: false
+      region: us-west-2
+      role_arn: arn:aws:iam::123456789012:role/TelemetryHubRole
+      trail_name: management-events
+    azure:
+      enabled: false
+      subscription_id: your-subscription-id
+      tenant_id_env: AZURE_TENANT_ID
+    gcp:
+      enabled: false
+      project_id: your-project-id
+
+  # DLP Tool Integrations (COTS)
+  dlp:
+    digital_guardian:
+      enabled: false
+      api_url: https://api.digitalguardian.com
+      api_key_env: DG_API_KEY
+    proofpoint:
+      enabled: false
+      api_url: https://tap-api-v2.proofpoint.com
+      api_key_env: PP_API_KEY
+      webhook_secret_env: PP_WEBHOOK_SECRET
+    purview:
+      enabled: false
+      tenant_id_env: AZURE_TENANT_ID
+      client_id_env: PURVIEW_CLIENT_ID
+      secret_env: PURVIEW_CLIENT_SECRET
+    netskope:
+      enabled: false
+      tenant_url: https://tenant.goskope.com
+      api_token_env: NETSKOPE_API_TOKEN
+
+# Schema Normalization
+normalization:
+  default_schema: ocsf  # Options: ocsf, ecs
+
+# Enrichment Sources
+enrichment:
+  threatforge:
+    enabled: false
+    api_url: http://threatforge:8080
+  identity:
+    entra_id:
+      enabled: false
+      tenant_id_env: AZURE_TENANT_ID
+      client_id_env: AZURE_CLIENT_ID
+      secret_env: AZURE_CLIENT_SECRET
+    okta:
+      enabled: false
+      domain: your-org.okta.com
+      api_token_env: OKTA_API_TOKEN
+  asset:
+    enabled: false
+    api_url: http://cmdb:8080
+
+# Output Destinations
+output:
+  splunk:
+    enabled: false
+    hec_url: https://splunk.example.com:8088
+    hec_token_env: SPLUNK_HEC_TOKEN
+    index: enriched_security
+    sourcetype: threat_telemetry_hub
+  elasticsearch:
+    enabled: false
+    addresses:
+      - https://elasticsearch.example.com:9200
+    index: enriched-security
+
+# DR/BC Configuration
+dr_bc:
+  enabled: true
+  primary_region: us-west-2
+  failover_region: us-east-1
+  rpo_minutes: 15
+  rto_minutes: 240
+
