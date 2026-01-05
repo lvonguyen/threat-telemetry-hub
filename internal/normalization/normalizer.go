@@ -15,11 +15,11 @@ import (
 type NormalizedEvent struct {
 	ID            string                 `json:"id"`
 	Timestamp     time.Time              `json:"timestamp"`
-	Schema        string                 `json:"schema"`        // "ocsf" or "ecs"
+	Schema        string                 `json:"schema"` // "ocsf" or "ecs"
 	SchemaVersion string                 `json:"schema_version"`
-	Category      string                 `json:"category"`      // e.g., "security_finding", "detection"
-	Type          string                 `json:"type"`          // e.g., "malware", "policy_violation"
-	Severity      int                    `json:"severity"`      // 0-100
+	Category      string                 `json:"category"` // e.g., "security_finding", "detection"
+	Type          string                 `json:"type"`     // e.g., "malware", "policy_violation"
+	Severity      int                    `json:"severity"` // 0-100
 	Source        SourceInfo             `json:"source"`
 	Data          map[string]interface{} `json:"data"`
 	Raw           map[string]interface{} `json:"raw,omitempty"`
@@ -27,11 +27,11 @@ type NormalizedEvent struct {
 
 // SourceInfo contains information about the event source
 type SourceInfo struct {
-	Name     string `json:"name"`
-	Type     string `json:"type"`
-	Vendor   string `json:"vendor"`
-	Product  string `json:"product"`
-	Version  string `json:"version,omitempty"`
+	Name    string `json:"name"`
+	Type    string `json:"type"`
+	Vendor  string `json:"vendor"`
+	Product string `json:"product"`
+	Version string `json:"version,omitempty"`
 }
 
 // Normalizer handles schema normalization
@@ -63,7 +63,7 @@ func (n *Normalizer) Normalize(raw *ingestion.RawEvent) (*NormalizedEvent, error
 // normalizeToOCSF converts to Open Cybersecurity Schema Framework
 func (n *Normalizer) normalizeToOCSF(raw *ingestion.RawEvent) (*NormalizedEvent, error) {
 	// OCSF Schema Reference: https://schema.ocsf.io/
-	
+
 	event := &NormalizedEvent{
 		ID:            raw.ID,
 		Timestamp:     raw.Timestamp,
@@ -103,7 +103,7 @@ func (n *Normalizer) normalizeToOCSF(raw *ingestion.RawEvent) (*NormalizedEvent,
 // normalizeToECS converts to Elastic Common Schema
 func (n *Normalizer) normalizeToECS(raw *ingestion.RawEvent) (*NormalizedEvent, error) {
 	// ECS Reference: https://www.elastic.co/guide/en/ecs/current/index.html
-	
+
 	event := &NormalizedEvent{
 		ID:            raw.ID,
 		Timestamp:     raw.Timestamp,
@@ -221,4 +221,3 @@ func (n *Normalizer) mapDLPToECS(raw *ingestion.RawEvent, event *NormalizedEvent
 	// TODO: Implement DLP to ECS mapping
 	event.Severity = 60
 }
-

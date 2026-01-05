@@ -132,7 +132,7 @@ type ProcessedEvent struct {
 
 // NewPipeline creates a new processing pipeline
 func NewPipeline(
-	ingestion *ingestion.Manager,
+	ingestionMgr *ingestion.Manager,
 	normalizer *normalization.Normalizer,
 	aiAnalyzer *ai.Analyzer,
 	enricher *enrichment.Enricher,
@@ -140,7 +140,7 @@ func NewPipeline(
 	logger *zap.Logger,
 ) *Pipeline {
 	return &Pipeline{
-		ingestion:  ingestion,
+		ingestion:  ingestionMgr,
 		normalizer: normalizer,
 		aiAnalyzer: aiAnalyzer,
 		enricher:   enricher,
