@@ -140,9 +140,52 @@ enrichment:
       tenant_id_env: AZURE_TENANT_ID
 ```
 
-## Architecture
+## Repository Structure
 
-See [docs/HLD.md](docs/HLD.md) for detailed architecture documentation.
+```
+threat-telemetry-hub/
+├── cmd/
+│   └── hub/main.go              # Main entry point
+├── internal/
+│   ├── ai/                      # AI providers (Anthropic, OpenAI)
+│   ├── api/gateway/             # API rate limiting
+│   ├── compliance/              # Finding schema with CVE mapping
+│   ├── config/                  # Configuration management
+│   ├── correlation/             # Event correlation engine
+│   ├── enrichment/              # Event enrichment
+│   ├── ingestion/               # Multi-source collectors
+│   ├── normalization/           # Schema normalization (OCSF/ECS)
+│   ├── observability/           # Logging, metrics, tracing, health
+│   └── output/ticketing/        # ServiceNow, Archer integration
+├── configs/                     # Configuration templates
+├── docs/
+│   ├── architecture/            # HLD, diagrams
+│   ├── adr/                     # Architecture Decision Records
+│   ├── runbooks/                # Technical runbooks
+│   └── DR-BC.md                 # Disaster Recovery & Business Continuity
+└── go.mod
+```
+
+## Observability
+
+- **Logging**: Structured JSON logging with zap
+- **Metrics**: Prometheus metrics at `/metrics`
+  - Events ingested/normalized/correlated rates
+  - Collector status and errors
+  - AI analysis duration
+  - Ticket creation rates
+- **Tracing**: OpenTelemetry distributed tracing
+- **Health**: Kubernetes-ready probes at `/health`, `/ready`, `/live`
+  - Collector health checks
+  - AI provider connectivity
+  - Pipeline throughput monitoring
+
+## Documentation
+
+- [ADR-001: Architecture Pattern](docs/adr/ADR-001-architecture.md)
+- [Technical Runbooks](docs/runbooks/README.md)
+  - [Collector Management](docs/runbooks/03-collector-management.md)
+- [DR/BC Plan](docs/DR-BC.md)
 
 ## Author
 
